@@ -1,0 +1,118 @@
+\begin{thebibliography}{10}\itemsep=-1pt
+
+\bibitem{Bertasius2016}
+G.~Bertasius, J.~Shi, and L.~Torresani.
+\newblock Semantic segmentation with boundary neural fields.
+\newblock In {\em Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 3602--3610, 2016.
+
+\bibitem{Chen2016a}
+H.~Chen, X.~Qi, L.~Yu, and P.-A. Heng.
+\newblock Dcan: Deep contour-aware networks for accurate gland segmentation.
+\newblock In {\em Proceedings of the IEEE conference on Computer Vision and
+  Pattern Recognition}, pages 2487--2496, 2016.
+
+\bibitem{Chen2016b}
+H.~Chen, X.~Qi, L.~Yu, and P.-A. Heng.
+\newblock Dcan: Deep contour-aware networks for accurate gland segmentation.
+\newblock In {\em Proceedings of the IEEE conference on Computer Vision and
+  Pattern Recognition}, pages 2487--2496, 2016.
+
+\bibitem{Chen2015}
+H.~Chen, C.~Shen, J.~Qin, D.~Ni, L.~Shi, J.~C. Cheng, and P.-A. Heng.
+\newblock Automatic localization and identification of vertebrae in spine ct
+  via a joint learning model with deep neural networks.
+\newblock In {\em International Conference on Medical Image Computing and
+  Computer-Assisted Intervention}, pages 515--522. Springer, 2015.
+
+\bibitem{Chen2016c}
+J.~Chen, L.~Yang, Y.~Zhang, M.~Alber, and D.~Z. Chen.
+\newblock Combining fully convolutional and recurrent neural networks for 3d
+  biomedical image segmentation.
+\newblock In {\em Advances in Neural Information Processing Systems}, pages
+  3036--3044, 2016.
+
+\bibitem{Chen2016}
+L.-C. Chen, J.~T. Barron, G.~Papandreou, K.~Murphy, and A.~L. Yuille.
+\newblock Semantic image segmentation with task-specific edge detection using
+  cnns and a discriminatively trained domain transform.
+\newblock In {\em Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 4545--4554, 2016.
+
+\bibitem{Chen2014a}
+L.-C. Chen, G.~Papandreou, I.~Kokkinos, K.~Murphy, and A.~L. Yuille.
+\newblock Semantic image segmentation with deep convolutional nets and fully
+  connected crfs.
+\newblock {\em arXiv preprint arXiv:1412.7062}, 2014.
+
+\bibitem{Dhungel2015}
+N.~Dhungel, G.~Carneiro, and A.~P. Bradley.
+\newblock Deep learning and structured prediction for the segmentation of mass
+  in mammograms.
+\newblock In {\em International Conference on Medical Image Computing and
+  Computer-Assisted Intervention}, pages 605--612. Springer, 2015.
+
+\bibitem{Jia2014}
+Y.~Jia, E.~Shelhamer, J.~Donahue, S.~Karayev, J.~Long, R.~Girshick,
+  S.~Guadarrama, and T.~Darrell.
+\newblock Caffe: Convolutional architecture for fast feature embedding.
+\newblock In {\em Proceedings of the 22nd ACM international conference on
+  Multimedia}, pages 675--678. ACM, 2014.
+
+\bibitem{Lieman-Sifry2017}
+J.~Lieman-Sifry, M.~Le, F.~Lau, S.~Sall, and D.~Golden.
+\newblock Fastventricle: Cardiac segmentation with enet.
+\newblock In {\em International Conference on Functional Imaging and Modeling
+  of the Heart}, pages 127--138. Springer, 2017.
+
+\bibitem{Long2015}
+J.~Long, E.~Shelhamer, and T.~Darrell.
+\newblock Fully convolutional networks for semantic segmentation.
+\newblock In {\em Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 3431--3440, 2015.
+
+\bibitem{Paszke2016}
+A.~Paszke, A.~Chaurasia, S.~Kim, and E.~Culurciello.
+\newblock Enet: A deep neural network architecture for real-time semantic
+  segmentation.
+\newblock {\em arXiv preprint arXiv:1606.02147}, 2016.
+
+\bibitem{Redmon2016}
+J.~Redmon, S.~Divvala, R.~Girshick, and A.~Farhadi.
+\newblock You only look once: Unified, real-time object detection.
+\newblock In {\em Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 779--788, 2016.
+
+\bibitem{Ren2015}
+S.~Ren, K.~He, R.~Girshick, and J.~Sun.
+\newblock Faster r-cnn: Towards real-time object detection with region proposal
+  networks.
+\newblock In {\em Advances in neural information processing systems}, pages
+  91--99, 2015.
+
+\bibitem{Ronneberger2015}
+O.~Ronneberger, P.~Fischer, and T.~Brox.
+\newblock U-net: Convolutional networks for biomedical image segmentation.
+\newblock In {\em International Conference on Medical Image Computing and
+  Computer-Assisted Intervention}, pages 234--241. Springer, 2015.
+
+\bibitem{Roth2015}
+H.~R. Roth, L.~Lu, A.~Farag, H.-C. Shin, J.~Liu, E.~B. Turkbey, and R.~M.
+  Summers.
+\newblock Deeporgan: Multi-level deep convolutional networks for automated
+  pancreas segmentation.
+\newblock In {\em International Conference on Medical Image Computing and
+  Computer-Assisted Intervention}, pages 556--564. Springer, 2015.
+
+\bibitem{Sirinukunwattana2015a}
+K.~Sirinukunwattana, D.~R. Snead, and N.~M. Rajpoot.
+\newblock A stochastic polygons model for glandular structures in colon
+  histology images.
+\newblock {\em IEEE transactions on medical imaging}, 34(11):2366--2378, 2015.
+
+\bibitem{Xu2016}
+Y.~Xu, Y.~Li, M.~Liu, Y.~Wang, Y.~Fan, M.~Lai, E.~I. Chang, et~al.
+\newblock Gland instance segmentation by deep multichannel neural networks.
+\newblock {\em arXiv preprint arXiv:1607.04889}, 2016.
+
+\end{thebibliography}
