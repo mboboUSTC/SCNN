@@ -1,0 +1,180 @@
+\section{Experiments}
+\label{sec:results}
+
+
+\mdf{To demonstrate our superiority over existing methods on segmentation,} we first present results on two diverse biomedical image segmentation problems, including synaptic vesicle segmentation and gland segmentation.
+%
+\mdf{To demonstrate the easy extension and generic applicability of our framework, we modified our SCNN to scene text segmentation task.}
+
+\subsection{Synaptic vesicle segmentation}
+\textbf{Dataset}
+Synaptic vesicle is a good example to evaluate our method.
+The images were acquired by . \cxj{by what?}
+They are much noisy and contain both vesicle and ambiguous membrane structure, such as cell nucleus.
+%The ground truths of dataset are held out by biologists for objective evaluation.
+The dataset is composed of $8787$ images with ground truth annotations provided by biologists.
+\cxj{image size?}
+%
+\mdf{Similar with many existing approaches, we utilize a data augmentation process to reduce the overfitting and increase the robustness of our network. 
+In the data augmentation, translation, rotation and image flipping are used. }
+\cxj{The final dataset size?}
+%
+\comments{[copy]To increase the robustness and reduce overfitting,
+we utilized the strategy of data augmentation to enlarge the training dataset.
+The augmentation transformations include translation, rotation and flipping.[copy]
+}
+%
+
+For cross validation experiments, The dataset are divided into two parts.
+The first five out of six images are prepared to train our model and the rest of them are used to test its performance.
+\cxj{Six-fold cross validation? or other strategy? }
+%
+The validation processing has been repeated several times and the average performance will be reports.
+
+\noindent\textbf{Implementation details.} 
+\mdf{We train our network on the open-source deep learning library Caffe~\cite{Jia2014}. }
+%[copy]Our framework was evaluated on the open-source deep learning library Caffe~\cite{Jia2014}[copy].
+Images are resized to $321\times 321$ as input and our network produces the objectness map and parameterized contour maps.
+\cxj{Do not directly copy. }
+[copy]A three-step training process is employed.
+We first train the segmentation branch independently and then we jointly fine-tune the multi-task network without joint max pooling.
+[copy]Specifically, we employ exactly the same setting as \cite{Chen2014a} in the first stage.[copy]
+%
+In the second stage, we set the balancing weight $\lambda=5$ and a small learning rate of $10^{-8}$ for fine-tuning.
+%
+In the final stage, the joint max pooling is attached to the tail of network and the whole model is fine-tuned again to further improve the performance.
+%
+In order to make better use of parameterized contour information, the joint max pooling is iterated twice with the pooling size $11\times 11$ and stride $1$.
+%
+Finally in \mdf{the} fusion step as most vesicle contours shape are regular, we set $\tau_1=0.2$ and $\tau_2=0.9$ for a strong modification by parameterized contour constraints.
+
+\noindent\textbf{Evaluation setup.}
+%
+The evaluation criteria in our experiments includes an score $F_1$ \mdf{to evaluate performance of object detection} and a pixel intersection-overunion (IOU) averaged across different classes to evaluate the segmentation accuracy .
+%The $F_1$ score considers the performance of object detection, while IOU consider the segmentation performance, respectively.
+
+For detection, the $F_1$ score is defined as:
+\cxj{Can we use a more intuitive symbol, say $R_{detection}$?}
+%
+\begin{eqnarray}\label{fusion}
+\begin{aligned}
+F1 = \frac{2PR}{P+R},P=\frac{N_{tp}}{N_{tp}+N_{fp}},R=\frac{N_{tp}}{N_{tp}+N_{fn}}
+\end{aligned}
+\end{eqnarray}
+where $M_{tp}$,$M_{fp}$ and $M_{fn}$ are respectively the number of true positives, false positives and false negatives.
+\cxj{There are no $M$ is the above equation. $N$?}
+Especially, a segmented object that intersects with at least 50 with the ground truth is regarded as a true positive, otherwise it is regarded as a false positive.
+If a ground truth object has no corresponding segmented object that intersects more than 50, it is regarded as a false negative.
+
+The IOU metric for segmentation accuracy is defined as:
+%
+\begin{eqnarray}\label{fusion}
+\begin{aligned}
+IOU = \frac{1}{N_s}\sum_{i=1}^{N_s}\frac{G_i\bigcap S_i}{G_i\bigcup S_i}
+\end{aligned}
+\end{eqnarray}
+%
+where $N_i$ denotes the number of segmented classes.
+$G_i$ denotes the ground truth of $i$-th class.
+$S_i$ denotes the segmented map of $i$-th class.
+\cxj{What do you mean by "classes" here? instances? }
+
+\noindent\textbf{Qualitative evaluation on vesicle segmentation}
+Figure \ref{} shows some segmentation results of testing data.
+In order to verify the effectiveness of parameterized contour information, we compared our method with U-net \cite{Ronneberger2015} relying only on the prediction of vesicle objects and DCAN~\cite{Chen2016a} using contour probability information.
+%
+From segmentation results we can see that without any complementary information, there exists many touching vesicle objects that cannot be separated by U-net.
+%
+This situation usually occurs in regions with ambiguous context between two vesicle objects.
+And the contours of many regular objects are very coarse, as the case shown in the second row of Figure \ref{}.
+Although DCAN is capable of separating the touching vesicles into individuals in the third row in Figre \ref{}, the obtained contours of regular vesicle are still coarse.
+In comparison, our SCNN using the parameterized contour information can not only separate those touching vesicles clearly, but also obtain a much smooth and regular shape for each vesicle contour.
+This demonstrates the superiority of our SCNN in segmenting densely arranged objects with regular shape contour by exploring the complementary information in parameterized contour descripition.
+
+
+\noindent\textbf{Quantitative evaluation.}
+\mdf{To quantitatively evaluate our method, we compare the object detection rate $F_1$ and the segmentaion accuracy IOU of our SCNN} with the state of the art segmentation methods based on Deeplab~\cite{Chen2014a}, U-net~\cite{Ronneberger2015} and DCAN~\cite{Chen2016b}, which are commonly used in biomedical image process.
+%
+Their results on our synaptic vesicle dataset are shown in \mdf{Table}~\ref{tab:vesicle}.
+%
+And we further implement two version of SCNN.
+The first SCNNv1 is the implementation of multi-task neural network without joint max pooling, and SCNNv2 is the complete form.
+Their results are also presented in Table \ref{tab:vesicle} to prove effectiveness of our joint max pooling.
+
+Qualitatively, the performance of SCNN surpassed all the other methods by a large margin on vesicle segmentation task, proving its effectiveness for segmenting regular biomedical objects.
+From Table \ref{}, we can find that
+
+\begin{table}\label{tab:vesicle}
+\begin{center}
+\begin{tabular}{lcc}
+\hline
+Method & F1 & IOU \\
+\hline
+DeepLab & 0.8404 & 0.8495 \\
+U-net & 0.8404 & 0.8495 \\
+DCAN & 0.8404 & 0.8495 \\
+SCNNv1 & 0.8404 & 0.8495 \\
+SCNNv2 & 0.8404 & 0.8495 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{The detection and segmentation results of different methods in our synaptic vesicle segmentation dataset. \cxj{Bold the best number.}}
+\end{table}
+
+
+
+
+
+\subsection{Gland segmentation}
+\textbf{Dataset}
+In this section we present SCNN for segmenting benign and malignant gland.
+We consider the public dataset of \emph{Gland Segmentation Challenge Contest} in MICCAI2015~\cite{Sirinukunwattana2015a}.
+%
+The training dataset is composed of 85 images, consisting of 37 benign and 48 malignant, with ground truth annotations provided by expert pathologists.
+Especially, there is a huge variation of glandular morphology in malignant case, which can prove the generalization of our SCNN to irregular objects.
+The same data augmentation in vesicle segmentation is implemented for a better performance.
+
+\textbf{Implementation details}
+Because there exists many irregular objects in gland images that we desire to remain more contour information obtained by object prediction, the contour modification by parameterized contour information should be relatively weaker than segmenting vesicles.
+By experimental verification, we find that $\tau_2=0.7$ and $\tau_1=0.4 $ produce a better results.
+\cxj{So　show comparison of results using different parameters.}
+%
+And we still use the standard elliptic parameter as the prior shape constraint for gland, as most benign glands and few malignant glands' shape are approximate ellipses.
+The other implementation settings and evaluation metrics follow the vesicle segmentation.
+
+\textbf{Qualitative evaluation on gland segmentation}
+Follow previous qualitative evaluation, we presented the results of u-net and the state of art method DCAN in gland segmentation with our SCNN in Figure~\ref{fig:com-gland}.
+The first two columns are the examples of benign gland images, and the rest two columns are the examples of malignant images.
+From the results, we can observed that both SCAN and SCNN can well solve the touching problem in benign and malignant cases.
+However for benign case, the contours of glands obtained by SCNN are more smooth than that of DCAN.
+And for malignant case, since SCNN only modify the segmentation predictions on the object border, there is no obvious deterioration compared to DCAN.
+
+\begin{figure}
+	\centering
+	\vspace{0.4in}
+	\caption{\cxj{Add comparison of gland segmentation with U-net and DCAN.}}
+	\label{fig:com-gland}
+\end{figure}
+
+\textbf{Quantitative evaluation}
+Table \ref{} shows the F1 score and IOU metric over the $Gland$ $Segmentation$ $Challenge$ $Contest$ by several commonly used biomedical segmentation methods.
+
+\begin{table}
+	\centering
+	\caption{Performance comparison on gland segmentation.}
+	\begin{tabular}{c|cc}
+		\hline 
+		Method & F1 & IOU \\
+		\hline
+		DeepLab & 0 & 0 \\
+		U-Net & 0 & 0 \\
+		DCAN & 0 & 0 \\
+		SCNN-v1 & 0 & 0 \\
+		SCNN-v2 & 0 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+\subsection{Scene text detection}
+We further extended SCNN to scene text detection task, which
