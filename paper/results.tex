@@ -85,14 +85,14 @@ In our object segmentation task, there are two kind of labels: object or backgro
 
 \noindent\textbf{Qualitative evaluation on synaptic vesicle segmentation}
 Figure \ref{FigVesicle} shows some segmentation results of testing data.
-In order to verify the effectiveness of parameterized shape information, we compared our method with U-net \cite{Ronneberger2015} without any complementary information and DCAN~\cite{Chen2016a} that uses auxiliary contour map.
+In order to verify the effectiveness of parameterized shape information, we compared our method with DeepLab \cite{Chen2014a} without any complementary information and DCAN~\cite{Chen2016a} that uses auxiliary contour map.
 
-From segmentation results we can see that without other complementary information, there exists many touching objects that cannot be separated by U-net (second row in \ref{FigVesicle}).
+From segmentation results we can see that without other complementary information, there exists many touching objects that cannot be separated by DeepLab (second row in \ref{FigVesicle}).
 This is because that the contours of many synaptic vesicles are very fuzzy and even not complete that miss a part of membrane due to deficient imaging technology shown in first row in \ref{FigVesicle}.
-Furthermore, as synaptic vesicles usually gather around presynaptic membrane, they are crowded together which increase the difficulty to separate them into individual ones. 
+Furthermore, as synaptic vesicles usually gather around presynaptic membrane, they are crowded together which increase the difficulty to separate them into individual ones.
 Although DCAN is capable to separate touching synaptic vesicles apart in the third row of Figure \ref{FigVesicle}, it produced additional false positive detections between two touching vesicles.
 The reason is that connection part between two touching vesicles are wide and long caused by terrible image quality, which can not be cleaned out by predicted contours.
-Therefore in \cite{Chen2016a}, that the touching glands are closed is also a factor of success of DCAN, and we will present our SCNN still works for segmenting closed touching objects in our second experiments.  
+Therefore in \cite{Chen2016a}, that the touching glands are closed is also a factor of success of DCAN, and we will present our SCNN still works for segmenting closed touching objects in our second experiments.
 Differen from above two methods, our SCNN uses the shape parameters of objects as complementary information to separate the touching object clearly without any sequela.
 The information in shape parameters of an object are more abundant, including the prior shape knowledge of segmented objects and main dominion belonging to the object.
 As the results shown in forth row of Figure~\ref{FigVesicle}, all the touching objects have been well separated and their shape are more smooth and regular.
@@ -108,8 +108,9 @@ The first SCNNv1 is the implementation of multi-task neural network without join
 Their results are also presented in Table~\ref{tab:vesicle} to prove effectiveness of our joint max pooling.
 
 From F1 score obtained in Table~\ref{tab:vesicle}, the performance of SCNN surpassed the other methods.
-Especially, we observed that the performance of u-net obtained about $3\%$ improvement over deeplab, both of which didn't use any auxiliary supervised information.
-This arises from the fact that U-shaped deep network applied by u-net to alleviate the touching problem by supplementing many context information to higher resolutions layers.
+The common low F1 scores are caused by difficulty in detecting dense synaptical vesicles in such noise background.
+Especially, we observed that the performance of u-net obtained about $3\%$ improvement over DeepLab, both of which didn't use any auxiliary supervised information.
+This arises from the fact that U-shape applied in u-net is effective to alleviate touching problem by supplementing many context information to higher resolutions layers.
 It confirmed that deficiency of context information due to successive pooling and downsampling layers is a significant factor of touching problem in biomedical segmentation.
 Furthermore, we noticed that F1 score of DCAN turns out to be the worst among all the methods.
 This mainly comes from the extra patch between two objects that are original touched and separated by predicted contours, shown in Figure~\ref{FigVesicle}.
@@ -118,7 +119,7 @@ And it can be seen that our joint max pooling operation significantly improve th
 
 From IOU metrics in Table~\ref{tab:vesicle}, our SCNN again gives the best performance among various methods.
 It should be noted that although the other methods also obtain a good IOU score, their contour are more coarse and irregular, which increase the difficulty of post-processing such as reconstruction of 3D synaptic vesicle structure.
-And our segmented vesicle are more clear and regular. 
+And our segmented vesicle are more clear and regular.
 
 
 \begin{table}
@@ -127,11 +128,11 @@ And our segmented vesicle are more clear and regular.
 \hline
 Method & F1 & IOU \\
 \hline
-DeepLab & 0.8404 & 0.8495 \\
-U-net & 0.1377 & 0.8180 \\
+DeepLab & 0.6675 & 0.8095 \\
+U-net & 0.6999 & 0.7756 \\
 DCAN & 0.7007 & 0.8533 \\
-SCNNv1 & 0.8097 & 0.8596 \\
-SCNNv2 & 0.8797 & $\mathbf{0.8642}$\\
+SCNNv1 & 0.7814 & 0.8857 \\
+SCNNv2 & $\mathbf{0.8140}$ & $\mathbf{0.8984}$\\
 \hline
 \end{tabular}
 \end{center}
