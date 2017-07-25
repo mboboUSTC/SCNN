@@ -16,6 +16,7 @@
 \newcommand{\cxj}[1]{\textcolor[rgb]{1.00,0.00,0.00}{(cxj: #1)}}
 \newcommand{\mdf}[1]{\textcolor[rgb]{0.00,0.00,1.00}{#1}}
 \newcommand{\bobo}[1]{\textcolor[rgb]{0.00,0.30,0.00}{(mbobo: #1)}}
+\newcommand{\que}[1]{\textcolor[rgb]{0.00,0.30,0.00}{#1}}
 \newcommand{\vb}[1]{\mathbf{#1}}
 \newcommand{\comments}[1]{}
 
@@ -35,7 +36,7 @@
 \begin{document}
 
 %%%%%%%%% TITLE
-\title{ShapeCNN: Shape-Constrained Neural Network \bobo{change a name? maybe the main ideal is not constraint} for Membrane Structure Segmentation via Joint Pooling Operation}
+\title{ShapeCNN: Shape-Constrained Neural Network \bobo{a more accurate description?} for Membrane Structure Segmentation via Joint Pooling Operation}
 
 \author{First Author\\
 Institution1\\
@@ -64,9 +65,9 @@ First line of institution2 address\\
    Accurate segmentation of biomembrane objects is a crucial step to obtain morphological statistics in biomedical analysis.
    However in many scenarios, prior shape knowledge about biomedical objects is available, which is especially useful for segmenting dense and regular objects.
    In this paper, we introduce a new approach, named shape-constrained neural network (SCNN), by incorporating prior shape knowledge about plausible components into neural network.
-   Our SCNN is a multi-task learning framework that simultaneously predicts objectness scores and parameterized expression of object shape at each position as auxiliary.
-   The auxiliary information are utilized to separate the segmented objects into individuals, and further optimize the objects shape.
-   Moreover, a novel joint pooling operation is developed as a trainable layer to optimize both predicted objectness scores and shape parameters, which are subsequently fused into final segmentation masks.
+   Our SCNN is a multi-task learning framework that simultaneously predicts objectness scores and parameterized expression of object shape for each pixel as auxiliary.
+   The auxiliary information are utilized to separate the segmented objects into individual ones, and further optimize their contour shapes.
+   Moreover, a novel joint pooling operation is developed as a trainable layer to optimize both predicted objectness scores and shape parameters, which are subsequently fused into final segmentation mask.
    The whole process is efficient and optimized end-to-end.
    Experiments on synaptic vesicle segmentation and glands segmentation demonstrate the effectiveness of our approach.
    And we expect our method to empower more works to incorporate more complicate shape constraints into segmentation tasks through deep convolutional neural networks.
