@@ -9,8 +9,8 @@ figure(1)
 plot(x,y1,x,y2,x,y3,x,y4);
 axis([0 12 75,85]);
 grid on;
-legend({'t1=0.1,t2=0.7','t1=0.2,t2=0.7','t1=0.3,t2=0.7','t1=0.4,t2=0.7'},'Location','southeast','FontSize',17);
-xlabel('sigma');
+legend({'\tau_{1}=0.1,\tau_2=0.7','\tau_1=0.2,\tau_2=0.7','\tau_1=0.3,\tau_2=0.7','\tau_1=0.4,\tau_2=0.7'},'Location','southeast','FontSize',17);
+xlabel('\epsilon','FontSize',16);
 ylabel('IOU(%)');
 
 
@@ -22,8 +22,8 @@ y4=[81.14,82.51,83.24,83.34,83.18];
 
 figure(2)
 plot(x,y1,x,y2,x,y3,x,y4);
-axis([0 12 80,85]);
+axis([0 12 80,84]);
 grid on;
-legend({'t1=0.1,t2=0.7','t1=0.2,t2=0.7','t1=0.3,t2=0.7','t1=0.4,t2=0.7'},'Location','southeast','FontSize',17);
-xlabel('sigma');
+legend({'\tau_1=0.1,\tau_2=0.7','\tau_1=0.2,\tau_2=0.7','\tau_1=0.3,\tau_2=0.7','\tau_1=0.4,\tau_2=0.7'},'Location','southeast','FontSize',17);
+xlabel('\epsilon','FontSize',16);
 ylabel('IOU(%)');
