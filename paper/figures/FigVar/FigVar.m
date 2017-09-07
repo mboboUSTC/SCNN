@@ -6,11 +6,16 @@ y3=[81.53,82.30,82.69,83.46,82.63];
 y4=[81.07,81.36,81.36,82.74,81.54];
 
 figure(1)
-plot(x,y1,x,y2,x,y3,x,y4);
-axis([0 12 75,85]);
+plot(x,y1,'b-s','LineWidth',2, 'MarkerFaceColor','k','MarkerFaceColor','b');hold on;
+plot(x,y2,'c-s','LineWidth',2, 'MarkerFaceColor','k','MarkerFaceColor','c')
+plot(x,y3,'y-s','LineWidth',2, 'MarkerFaceColor','k','MarkerFaceColor','y')
+plot(x,y4,'k-s','LineWidth',2, 'MarkerFaceColor','k','MarkerFaceColor','k')
+axis([0 12 78,84]);
+set(gca,'XTick',0:3:12);
+set(gca,'YTick',78:1:84);
 grid on;
-legend({'\tau_{1}=0.1,\tau_2=0.7','\tau_1=0.2,\tau_2=0.7','\tau_1=0.3,\tau_2=0.7','\tau_1=0.4,\tau_2=0.7'},'Location','southeast','FontSize',17);
-xlabel('\epsilon','FontSize',16);
+legend({'\tau_{1}=0.1,\tau_2=0.7','\tau_1=0.2,\tau_2=0.7','\tau_1=0.3,\tau_2=0.7','\tau_1=0.4,\tau_2=0.7'},'Location','southeast','FontSize',22);
+xlabel('\epsilon','FontSize',20);
 ylabel('IOU(%)');
 
 
@@ -21,9 +26,14 @@ y3=[81.19,82.64,83.35,83.45,83.30];
 y4=[81.14,82.51,83.24,83.34,83.18];
 
 figure(2)
-plot(x,y1,x,y2,x,y3,x,y4);
-axis([0 12 80,84]);
+plot(x,y1,'m-s','LineWidth',2, 'MarkerFaceColor','k','MarkerFaceColor','m');hold on;
+plot(x,y2,'g-s','LineWidth',2, 'MarkerFaceColor','k','MarkerFaceColor','g')
+plot(x,y3,'b-s','LineWidth',2, 'MarkerFaceColor','k','MarkerFaceColor','b')
+plot(x,y4,'k-s','LineWidth',2, 'MarkerFaceColor','k','MarkerFaceColor','k')
+axis([0 12 78,84]);
+set(gca,'XTick',0:3:12);
+set(gca,'YTick',78:1:84);
 grid on;
-legend({'\tau_1=0.1,\tau_2=0.7','\tau_1=0.2,\tau_2=0.7','\tau_1=0.3,\tau_2=0.7','\tau_1=0.4,\tau_2=0.7'},'Location','southeast','FontSize',17);
-xlabel('\epsilon','FontSize',16);
+legend({'\tau_1=0.2,\tau_2=0.6','\tau_1=0.2,\tau_2=0.7','\tau_1=0.2,\tau_2=0.8','\tau_1=0.2,\tau_2=0.9'},'Location','southeast','FontSize',22);
+xlabel('\epsilon','FontSize',20);
 ylabel('IOU(%)');
