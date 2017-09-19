@@ -4,10 +4,9 @@
     \begin{center}
         \includegraphics[width=6.7in]{figures/FigDSAN.pdf}
     \end{center}
-    \caption{Overview of our proposed DSAN. Given an image (a), a multi-task network simultaneously predicts objectness scores (d) and shape parameters of objects (c) by successive convolutions denoted by Conv.
-    For convenience, operations, such as pooling and ReLu, have been omitted.
-    Then a split max pooling (SMP) is applied to pool (c) with (d) and output new shape parameters (e).
-    Finally, the segmentation mask (f) is obtained by fusing (Fusion) objectness scores (d) and shape parameters (e).}
+    \caption{Overview of our proposed DSAN. Given an image (a), a multi-task network simultaneously predicts an objectness score map (d) and several shape parameter maps (c) based on the shared feature maps (b).
+    Then a split max pooling (SMP) pools the shape parameters (c) using objectness score (d), which gives the optimized shape parameters (e).
+    Finally, the segmentation mask (f) is obtained by fusing (d) and (e) (Piecewise fusion).}
     \label{FigDSAN}
 \end{figure*}
 
@@ -27,14 +26,14 @@ The feature extracting part is shared and based on DeepLab~\cite{Chen2014a}, whi
 Then, the feature maps extracted by last shared convolution layer are fed into two individual branches.
 %In each branch, successive two convolution layers are applied to the input feature maps with stride $1$ and kernel size $3\times 3$ and $1\times 1$ respectively.
 %Then the outputs of each branch are upsampled to match the original image using bilinear interpolation.
-In each branch, successive two convolution layers are applied to the shared feature maps and an upsample layer restore the predictions to the original image size.
+In each branch, two successive convolution layers are applied to the shared feature maps and an upsample layer restore the predictions to the original image size.
 During training, the parameters of shared layers are jointly optimized, while the parameters of two branches are updated independently.
 
 Instead of directly predicting contour probabilities in \cite{Chen2017,Chen2016,Bertasius2016}, we choose the parameterized expression of objects shape as complementary information, which emphasizes more on the overall shape of objects to be segmented.
 For example in vesicle segmentation, since the shape of most vesicle objects are approximately ellipse, we choose the ellipse as the prior shape knowledge and express them with the parameters $\{\theta, \mu_c, \nu_c, a, b\}$.
 $\theta$ is the rotated angle of major axis from $x-$axis.
 $(\mu_c, \nu_c)$ are the coordinates of the ellipse center.
-And $a$, $b$ are respectively the lengths of major and minor axis.
+And $a$, $b$ are respectively the lengths of major and minor axes.
 With these definitions, the auxiliary maps has $5$ channels and each $T_k$ predicts one of the five parameters.
 Especially for pixel $i$, the predicted shape parameters $\mathbf{t}_i= \{T_{1,i},\ldots,T_{5,i}\}$ formulate the shape of the nearest object to pixel $i$.
 For better regression, the shape parameters are further normalized by image width $W$ and height $H$ so that they fall in $[0,1]$:
@@ -84,8 +83,8 @@ And $\lambda$ is a balancing weight between $L_{cls}$ and $L_{reg}$.
 \end{figure}
 
 Obtained from two individual branches of multi-task FCN, the predicted shape parameters in auxiliary maps are not accurate enough to optimize the objects shape predicted by objectness map as shown in Table~\ref{tab:var}.
-This is caused by different perception field needed by different position to explore the complete shape of an object.
-Usually, predictions in the central region of an object in auxiliary maps are more accurate than those in boundary regions, which needs a lager perception filed to learn the whole object shape.
+This is caused by different perception field needed to explore an object at different position.
+Usually, a larger perception field is needed by predicting at boundary region than that in central region, thus the central predictions of an object are more accurate.
 To this end, we introduce a novel split max pooling (SMP) to improve the accuracy of auxiliary predictions in boundary region of objects by utilizing the complementary information in objectness scores.
 Different from conventional max pooling, our SMP takes two maps as inputs and pools one with the other one, of which the back propagation can further benefit both inputs by their inherent association.
 
@@ -122,7 +121,7 @@ As $\omega_i$ is the element in $\mathcal{N}^{\omega}_{j}$, only the maximal ele
 A simple example of Eq.~\ref{smp} is shown in Figure~\ref{FigSMP}.
 And we can forecast that $Y$ will be gradually filled by $x$ with the maximum $\omega$, along with this process iterated.
 
-In our segmentation task, it is reasonable to believe that the objectness score $P_i$ obtained in central region of an object are more likely to be the local maximum.
+In our segmentation task, we find that the objectness score $P_i$ in central region of an object are usually the local maximum.
 Therefore, our SMP is able to replace the predicted shape parameters $T_{k,i}$ in boundary region with that in central region of an object, which are usually more accurate.
 Especially, the pooling stride is fixed to be $1$ to maintain an unchanged resolution of output map, while the pooling size and iteration times of SMP jointly determine the spreading range of a $T_{k,i}$ with maximum $P_i$.
 
@@ -140,7 +139,7 @@ With most residual error of $T_{k,i}$ converged at the pixels with maximum $P_i$
 
 %Specially in Figure \ref{FigSCNN}, the input segmentation map is assumed to not only influence the output but also feeds a subsequent layers, thus also receiving gradient contributions $\frac{\partial L}{\partial s_{i,j}}$ from the next layer during back-propagation.
 
-For back propagation of $\omega_i$, we assume that $\mathbf{W}$ not only influences the output $Y$ of the layer, but also receiving gradient contributions $\frac{\partial L}{\partial \omega_{i}}$ from next layer, such as subsequent SMP or $L_{cls}$.
+For back propagation of $\omega_i$, we assume that $\mathbf{W}$ not only influences the output $Y$ of the layer, but also receives gradient contributions $\frac{\partial L}{\partial \omega_{i}}$ from next layer, such as subsequent SMP or $L_{cls}$.
 Then the back propagation for $\omega_{i}$ is formulated by
 %
 \begin{eqnarray}\label{bps}
@@ -165,8 +164,8 @@ Intuitively, Eq.~\ref{dG} magnifies the loss weights of local maximum $\omega_{i
 \subsection{Piecewise Fusion for Segmentation Mask}
 \label{sec:fusion}
 Based on the objectness map and auxiliary maps obtained from SMP, the final segmentation mask can be generated by fusing them together.
-However since some pathological objects are out of our prior shape knowledge, the shape parameters should be carefully utilized for avoiding obviously weakening the generalization of network to various shape of objects.
-In this section, a piecewise fusion strategy is applied by modifying the labels in boundary regions with the prior shape knowledge to reaches a balance between regularization and unconstraint.
+However because of some pathological objects, the prior shape knowledge can not be too strict to weaken the generalization of network for seriously deformable objects.
+Therefore in this section, a piecewise fusion strategy is applied by only using the prior shape knowledge in boundary regions to reach a balance between regularity and variety.
 
 A key observation is that the objectness scores perform better in segmenting pathological objects of huge variation, while the shape parameters do well in separating objects apart and giving their regular shapes approximately in terms of prior shape knowledge.
 Therefore we first divide an image into three parts: objectness region, ambiguous region and background region according to objectness scores by two threshold factors: $\tau_1$ and $\tau_2$.
@@ -205,10 +204,10 @@ where $\mu$, $\nu$ are spatial coordinates of pixel $i$.
     \caption{Diagram of effects of varying $[\tau_1,\tau_2]$ to final segmentation (better seen in color).}
     \label{FigFusion}
 \end{figure}
-Especially, the range of $[\tau_1,\tau_2]$ controls the degree of regularization to the shape of segmented objects.
+Especially, the range of $[\tau_1,\tau_2]$ controls the degree of regularity to the shape of segmented objects.
 Figure~\ref{FigFusion} displays the changing process of objects shape with varying $[\tau_1,\tau_2]$.
 It can be observed that, when the range of $[\tau_1,\tau_2]$ increases, the shape constraint on segmented objects becomes stronger.
 And a small range of $[\tau_1,\tau_2]$ can retain the good generalization of model to irregular shape, while a larger range of $[\tau_1,\tau_2]$ performs better on separating objects apart and optimizing the shape of objects in terms of prior shape knowledge.
-Therefore, the optimal $\tau_1, \tau_2$ should be determined by experiments so that both advantages of regularization and unconstraint can be retained.
+Therefore, the optimal $\tau_1, \tau_2$ should be determined by experiments so that both advantages of regularity and variety can be retained.
 Furthermore any shape constraints can be easily incorporated by changing the definition in Eq.~\ref{EqPara}, if only the shape can be formulated by parameters.
 

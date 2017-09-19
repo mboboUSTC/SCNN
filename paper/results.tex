@@ -23,10 +23,10 @@ The model of DSAN is well trained by a two-step process.
 In the first stage, we independently train the segmentation branch as a general segmentation task following \cite{Chen2014a}.
 The base learning rate was set as $10^{-3}$ and a `step' policy is adopted by decreasing the learning rate by a fact of $10$ every $2000$ iterations.
 And mini-batch size was set to $30$ for one iteration with the max iteration number $20000$.
-In the second stage, the multi-task FCN as well as $K$ sequential SMP layers is jointly fine-tuned based on the model from the first stage.
+In the second stage, the multi-task FCN as well as $M$ sequential SMP layers is jointly fine-tuned based on the model from the first stage.
 The learning rate drops to $10^{-8}$, and the iteration number in the second stage is set as $8000$.
 The balancing weight $\lambda$ in Eq.~\ref{EqLoss} and $\alpha$ in Eq.~\ref{dG} are experimentally set to be $10^{-4}$ and $10^{-3}$.
-Especially, $K$, $k_s$, $\tau_1$ and $\tau_2$ will be jointly explored in latter experiment.
+Especially, $M$, $k_s$, $\tau_1$ and $\tau_2$ will be jointly explored in latter experiment.
 
 \noindent\textbf{Evaluation setup.}
 %
@@ -62,9 +62,9 @@ F1(\%)&68.67&72.08&75.29&77.41&$\mathbf{78.88}$\\
 \label{tab:var}
 \end{table}
 
-\noindent\textbf{Exploring the effect of $\{K, k_s, \tau_1, \tau_2\}$ to final segmentation.}
-In this experiment, the effects of different $K$, $k_s$, $\tau_1$, $\tau_2$ on the segmentation performance are jointly investigated.
-In order to reduce the hyper-parameters, we use $\varepsilon=\frac{(K-1)k_s}{2}$ to represent the effect of both $K$ and $k_s$ , because they have similar effects on SMP of changing the spreading range of a local maximum value.
+\noindent\textbf{Exploring the effect of $\{M, k_s, \tau_1, \tau_2\}$ to final segmentation.}
+In this experiment, the effects of different $M$, $k_s$, $\tau_1$, $\tau_2$ on the segmentation performance are jointly investigated.
+In order to reduce the hyper-parameters, we use $\varepsilon=\frac{(M-1)k_s}{2}$ to represent the effect of both $M$ and $k_s$ , because they have similar effects on SMP of changing the spreading range of a local maximum value.
 Especially, $\varepsilon=0$ means no split max pooling applying to the network.
 First, we fix $\tau_2=0.7$ and vary $\tau_1$ to observe its influence of different $\varepsilon$ in DSAN model as shown in Figure~\ref{FigVar}~(a).
 Then, $\tau_1$ is fixed and $\tau_2$, $\varepsilon$ are varied in Figure~\ref{FigVar}~(b).
@@ -72,6 +72,8 @@ Observed from Figure~\ref{FigVar}, it is properly to employ $\varepsilon=9$ for 
 In practice, we set $k_s=9$ and $K=3$ to satisfy the condition of $\varepsilon=9$ as well as for efficiently implementing DSAN.
 For $\tau_1$ in Figure~\ref{FigVar} (a), we find that $\tau_1=0.2$ is the best setting when $\varepsilon=9$.
 And fixing $\tau_1=0.2$, $0.9$ is found to be optimal for $\tau_2$ according to Figure~\ref{FigVar} (b).
+After searching the optimal $\tau_1$ and $\tau_2$, Table~\ref{tab:time} evaluates the effects of different $M$ and $k_s$ by fixing $\frac{(M-1)k_s}{2}=9$.
+From Table~\ref{tab:time}, the effects of $M$ and $k_s$ on inference times are small, thus we use $M=3$ and $k_s=3$ in rest experiments. 
 Finally, we find that the thresholds setting of $[0.2, 0.9]$ in Eq.~\ref{fusion} give the best performance on segmenting synaptical vesicles.
 
 Furthermore, table~\ref{tab:var} shows the results of several interval of $[\tau_1,\tau_2]$, where the $L_{aux}$ indicates the second loss term in Eq.~\ref{EqLoss}.
@@ -81,7 +83,7 @@ And from the IOU score and F1 score, we find that too strong shape constraint on
     \begin{center}
         \includegraphics[width=6.8in]{figures/FigVesicle.pdf}
     \end{center}
-    \caption{Some segmentation results (better seen in color) of synaptic vesicle: (a) the input image; (b)-(e) the segmentation respectively from deeplab, u-net, DCAN- and DCAN; (f) the ground truth.}
+    \caption{Some segmentation results (better seen in color) of synaptic vesicle: (a) the input image; (b)-(e) the segmentation respectively from deeplab, u-net, DCAN and DSAN; (f) the ground truth.}
     \label{FigVesicle}
 \end{figure*}
 
@@ -222,5 +224,5 @@ And for some benign cases, the predicted shape of irregular objects are also sat
 \textbf{Quantitative evaluation}
 Table \ref{tab:gland-det} shows the F1 score and Table \ref{tab:gland-seg} shows object-level Dice index metric over \emph{Gland Segmentation Challenge Contest} by several published gland segmentation methods.
 From the results, it can be seen that, with auxiliary shape parameters, the detection performance of our DSAN is slightly better than the results of DCAN, while the segmentation performance of DSAN is comparable.
-But it should be noted that both detection and segmentation of Benign cases of our DSAN are superior than all the other methods. 
+But it should be noted that both detection and segmentation of Benign cases of our DSAN are superior than all the other methods.
 And the overall performance of DSCN is still conspicuous due to its superiority in separating touching objects apart and optimizing the boundaries of regular objects, while still accommodating seriously deformable objects.
