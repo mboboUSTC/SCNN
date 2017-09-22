@@ -7,7 +7,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{bbm}
-\usepackage{ccmap}
+%\usepackage{ccmap}
 % Include other packages here, before hyperref.
 
 \usepackage{color}
@@ -37,7 +37,8 @@
 \begin{document}
 
 %%%%%%%%% TITLE
-\title{Deep Shape-Aware Network for Objects Segmentation with Prior Shape Knowledge}
+\title{Deep Shape-Aware Network for Object Segmentation} 
+%with Prior Shape Knowledge}
 
 \author{First Author\\
 Institution1\\
@@ -62,15 +63,14 @@ First line of institution2 address\\
 %%%%%%%%% ABSTRACT
 \begin{abstract}
    Accurate segmentation of biomembrane objects is a crucial step to obtain morphological statistics in biomedical analysis.
-   However in many scenarios, prior shape knowledge about biomedical objects is available, which is useful for resolving the coarse boundary and touching problem.
-   In this paper, we introduce a novel Deep Shape-Aware Network (DSAN) by incorporating prior shape knowledge about plausible components into the network.
+   \mdf{In many scenarios, prior shape knowledge about the target object is available, which is valuable for resolving the coarse boundary and touching problem.}
+   In this paper, we introduce a novel Deep Shape-Aware Network (DSAN) by incorporating prior shape knowledge about plausible components into segmentation tasks.
    Our DSAN is a multi-task framework that simultaneously predicts an objectness score and several shape parameters as auxiliary at each pixel.
    The shape parameters formulate the shape of each object, which can not only separate segmented objects into individual ones, but also optimize their boundaries in terms of prior shape knowledge.
    Furthermore, a novel split pooling operation is developed to optimize both objectness scores and shape parameters to produce better segmentation masks.
-   The whole process is efficient and trained end-to-end.
-   Experiments on two challenging biomedical problems, including synaptic vesicles and histopathological glands segmentation, demonstrate the effectiveness of our approach.
-   And we expect our method to empower more work to utilize prior shape
-    knowledge into neural networks to benefit their researches.
+   The proposed framework is efficient and can be trained end-to-end.
+   The experimental results on two challenging biomedical problems, including synaptic vesicles and histopathological glands segmentation, demonstrate the effectiveness of our approach.
+   We expect our method to empower more work by utilizing prior shape knowledges into neural networks.
 
 \end{abstract}
 
@@ -79,24 +79,8 @@ First line of institution2 address\\
 \input{related}
 \input{algorithm}
 \input{results}
+\input{conclusion}
 
-\section{Discussion}
-The experiments have shown great superiority of our DSAN in segmentation tasks with available prior shape knowledge.
-However the limitations of our method are also obvious.
-First, the shape constrain should be simple, which can be formulated by parameters, such as ellipse, rectangle or starriness.
-Especially, some complicated shape can be also parameterized by PCA or other methods, which is our following research.
-Second, our method can only introduce one kind of shape constraint into the network for each time.
-If the images contain several kinds of object with different prior shape knowledge, our DSAN is powerless.
-We believe that the above deficiencies will be soon improved and more complicate prior knowledge can be introduced into CNN for better application. 
-
-\section{Conclusion}
-In this paper, a novel and general method is proposed for incorporating the prior shape knowledge into neural network to segment the plausible objects in biomedical images.
-Based on the popular multi-task FCN in segmentation, we replace the auxiliary contour probability with the shape of objects, formulated by a set of meaningful parameters.
-In order to improve the accuracy of predicted shape parameters, a novel split max pooling layer is proposed to replace the predictions in boundary regions with those in center of an object.
-Finally with our local fusion strategy, the degree of shape constraint can be flexibly adjusted in terms of different tasks.
-We experiment our method on two biomedical tasks for segmenting synaptical vesicles from electron microscope images and the glandular structures from colorectal cancer tissues.
-%To further prove the generality of our model to diverse shape constraint, we extend our method to the scene text detection task by segmenting the scene text region with regular shape.
-All the experiments have demonstrated the effectiveness of our methods on object segmentation with prior shape knowledge.
 
 {\small
 \bibliographystyle{ieee}
