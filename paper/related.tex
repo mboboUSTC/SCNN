@@ -1,15 +1,20 @@
 \section{Related Work}
+Biomedical image segmentation is a traditional topic in computer vision.
+In this section, we briefly review the development of segmentation techniques in biomedical field and discuss the recent applications of prior shape constraint in generic segmentation problems.
+
 \textbf{Biomedical image segmentation} Convolutional neural networks have shown great improvement in many segmentation tasks in medical image analysis \cite{Dhungel2015a,Roth2015a,Roth2016,Chen2016e,Nogues2016,Dou2016,Qin2016,Chen2017,Ronneberger2015,Lieman-Sifry2017,Chen2016c}.
 However, because of the pooling and downsampling layers used in FCN \cite{Long2015}, the localized object boundaries are usually poor and coarse, which aggravate the touching problem \cite{Dou2016,Chen2017,Ronneberger2015,Lieman-Sifry2017,Chen2016c}.
 To this end, the U-net~\cite{Ronneberger2015} was proposed by employing a U-shape deep convolutional network for biomedical image segmentation and obtained state-of-the-art performance on several challenges.
 Although the raw context information can be directly propagated to higher resolution layers for detail preserving by U-net, the utilization of weighting losses on boundaries may not satisfactorily handle the touching problem.
 Soon several improvement on U-net were proposed \cite{Lieman-Sifry2017,Chen2016c,Cicek2016}.
-Chen et al. \cite{Chen2016c} propose the kU-net by employ multiple submodule U-nets to work on different image scales, and Lieman-Sifry et al. \cite{Lieman-Sifry2017} substitute same padding with valid padding in cardiac segmentation.
-Recently, DCAN \cite{Chen2017} proposed a multi-task learning framework to solve the touching problem by incorporating the complementary objects contour into the model, which inspired us, and their method obtained state-of-the-art performance in the challenging gland segmentation task.
+Chen et al \cite{Chen2016c} propose the kU-net by employ multiple submodule U-nets to work on different image scales, and Lieman-Sifry et al \cite{Lieman-Sifry2017} substitute same valid with same padding in cardiac segmentation.
+Recently, DCAN \cite{Chen2017} proposed a multi-task learning framework to solve the touching problem by incorporating the complementary objects contour into the model, and their method obtained state-of-the-art performance in the challenging gland segmentation task.
+As the contour predictions determine the performance of DCAN in separating touching objects apart, it suffers from the influence of blurry boundaries to the contour predicting.
+Inspired by DCAN, our DSAN proposed to use the prior shape knowledge as the constraint to solve the touching problem, which is robust to blurry contour and can further optimize the segmented object shape.
 
 \textbf{Shape constraints for segmentation} Instead of directly learning from the raw images, many methods have been attempted to introduce the prior knowledge of plausible objects.
-Delgado-Gonzalo et al. \cite{Delgado-Gonzalo2012} was designed for segmenting elliptical objects sequentially and Tseng et al. \cite{Veksler2008a} introduced the star convexity priors into their model by restricting all rays emanating from a user-defined central point.
-Soon, the approach in \cite{Veksler2008a} was extended to Geodesic Star Convexity constraint by \cite{Gulshan2010a}, and Gorelick et al. \cite{Gorelick2014a} succeeded in introducing the convex shape constraints into segmentation task.
-Recently, Royer et al. \cite{Royer2016a} is able to handle many generic convex objects of multiple foreground classes automatically.
-Although, the existing methods gave the satisfying performance in their task, they did not use the powerful feature representation capability of CNN model.
+Delgado-Gonzalo et al \cite{Delgado-Gonzalo2012} was designed for segmenting elliptical objects sequentially and Tseng et al \cite{Veksler2008a} introduced the star convexity priors into their model by restricting all rays emanating from a user-defined central point.
+Soon, the approach in \cite{Veksler2008a} was extended to Geodesic Star Convexity constraint by \cite{Gulshan2010a}, and Gorelick et al \cite{Gorelick2014a} succeeded in introducing the convex shape constraints into segmentation task.
+Recently, Royer et al \cite{Royer2016a} is able to handle many generic convex objects of multiple foreground classes automatically.
+Although, the existing methods gave the satisfying performance in their task, they had not used the powerful feature representation capability of CNN model.
 Thus in this paper, we first introduce the shape constraint into the neural network for biomedical segmentation, of which the prior shape knowledge about plausible objects are usually available.

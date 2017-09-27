@@ -16,14 +16,15 @@ Therefore, it is significantly demanded to improve the efficiency as well as the
 However, it is non-trivial to automatically segment objects in biomedical images.
 First, biomedical images are usually noisy and ambiguous caused by deficient imaging techniques, as shown in Figure~\ref{FigImgs} (a).
 Second, the dense arrangement and blurry boundaries of objects in biomedical images make it hard to separate adjacent objects individually, which is known as the touching problem.
-Finally it is challenging to incorporate prior shape knowledge about plausible objects to into the model, because of huge variation of some pathological objects, \cite{Sirinukunwattana2015b}.
+Finally it is challenging to incorporate the prior shape knowledge about target objects into the model due to some pathological objects with huge variation.
 
 Recently, fully convolution network (FCN) networks have shown tremendous progress in image segmentation \cite{Long2015a,Chen2016d,Dai2015,Zheng2015}.
-The famous U-shaped deep network called U-net~\cite{Ronneberger2015} was proposed for biomedical image segmentation, which obtained great performance in solving touching problem.
-To solve the touching problem, the U-net used skip connections between contracting and expanding paths to supplement the lost information and further added weighting losses on boundary pixels for clear boundaries in segmentation.
-Soon, DeepVentricle~\cite{Lieman-Sifry2017} uses the same padding instead of valid padding in cardiac segmentation and Chen et al. \cite{Chen2016c} proposed kU-net to employ multiple submodule FCNs to work on different image scales systematically.
-Recently, DCAN~\cite{Chen2017} integrates complementary information of objects and contours in a multi-task learning framework to separate the clustered objects into individual ones, which obtains the state-of-the-art performance.
-Although these methods achieved promising results in their segmentation tasks, they may fail to achieve satisfying performance in more blurry images with denser and smaller objects.
+The famous U-shaped deep network called U-net~\cite{Ronneberger2015} was proposed for biomedical image segmentation, which used the skip connections between contracting and expanding paths to supplement the lost information and obtained great performance.
+Especially for solving the touching problem, the U-net added the weighting losses on boundary pixels for clear boundaries, but the effect is limited when the boundaries are ambiguous.
+Soon, DeepVentricle~\cite{Lieman-Sifry2017} uses the same padding instead of valid padding in cardiac segmentation and Chen et al \cite{Chen2016c} proposed kU-net to employ multiple submodule FCNs to work on different image scales systematically.
+Recently, DCAN~\cite{Chen2017} integrates complementary information of objects and contours in a multi-task learning framework to separate the clustered objects into individual ones, which obtains state-of-the-art performance.
+However, the contour predictions is very sensitive to the blurry boundaries, which will easily lead to unclear segmentation.
+Although these methods achieved promising results in their segmentation tasks, they may fail to well handle the images with denser objects and blurry boundaries.
 
 In this paper, we propose the Deep Shape-Aware network (DSAN) to segment dense objects by first inherently incorporating prior shape knowledge into network.
 Similar to \cite{Chen2017,Ren2015,Li2016a,Chen2016,Bertasius2016}, we formulate the network as a multi-task learning framework by simultaneously predicting an objectness score map and several auxiliary maps for an input image.
@@ -33,14 +34,23 @@ The complementary information in auxiliary parameters can not only separate the 
 
 However because of huge variation of some objects in pathological cases, the shape of objects cannot be parameterized uniformly and constrained strictly.
 Therefore, we select a best shape as constraint and employ a piecewise fusion strategy to generate the final segmentation masks, which achieves a balance between regularity and variety in segmented objects shape.
-Furthermore, a novel split max pooling (SMP) is proposed to benefit both objectness scores and shape parameters by exploring the intrinsic correlation between them.
-Besides, SMP is designed as a trainable layer, which can be trained end-to-end and easily extended to any multi-task networks.
+Furthermore, a novel joint max pooling (JMP) is proposed to benefit both objectness scores and shape parameters by exploring the intrinsic correlation between them.
+Besides, JMP is designed as a trainable layer, which can be trained end-to-end and easily extended to any multi-task networks.
 With above mentioned strategies, our DSAN can not only optimize the segmented shape of regular objects with prior shape knowledge, but also accommodates seriously deformable objects.
 
+\begin{figure*}
+    \begin{center}
+        \includegraphics[width=6.7in]{figures/FigDSAN.pdf}
+    \end{center}
+    \caption{Overview of our proposed DSAN. Given an image (a), a multi-task network simultaneously predicts an objectness score map (d) and several shape parameter maps (c) based on the shared feature maps (b) from the ConvNet.
+    Then a joint max pooling (JMP) pools the shape parameters (c) using objectness score (d), which gives the optimized shape parameters (e).
+    Finally, the segmentation mask (f) is obtained by fusing (d) and (e) (Piecewise fusion).}
+    \label{FigDSAN}
+\end{figure*}
 Overall, the contribution of this paper is three-fold:
 \begin{enumerate}
 	\item We first effectively incorporate shape constraint into deep neural networks.
 	% for biomedical image segmentation.
-	\item We propose a novel split max pooling for benefiting both multi-task outputs.
+	\item We propose a novel joint max pooling for benefiting both multi-task outputs.
 	\item Our framework is capable to handle the challenging biomedical segmentation tasks and achieves the state-of-the-art performance.
 \end{enumerate}

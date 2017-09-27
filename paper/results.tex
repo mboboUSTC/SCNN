@@ -23,7 +23,7 @@ The model of DSAN is well trained by a two-step process.
 In the first stage, we independently train the segmentation branch as a general segmentation task following \cite{Chen2014a}.
 The base learning rate was set as $10^{-3}$ and a `step' policy is adopted by decreasing the learning rate by a fact of $10$ every $2000$ iterations.
 And mini-batch size was set to $30$ for one iteration with the max iteration number $20000$.
-In the second stage, the multi-task FCN as well as $M$ sequential SMP layers is jointly fine-tuned based on the model from the first stage.
+In the second stage, the multi-task FCN as well as $M$ sequential JMP layers is jointly fine-tuned based on the model from the first stage.
 The learning rate drops to $10^{-8}$, and the iteration number in the second stage is set as $8000$.
 The balancing weight $\lambda$ in Eq.~\ref{EqLoss} and $\alpha$ in Eq.~\ref{dG} are experimentally set to be $10^{-4}$ and $10^{-3}$.
 Especially, $M$, $k_s$, $\tau_1$ and $\tau_2$ will be jointly explored in latter experiment.
@@ -58,14 +58,14 @@ F1(\%)&68.67&72.08&75.29&77.41&$\mathbf{78.88}$\\
 \end{center}
 \caption{Effects of using different $[\tau_1,\tau_2]$.
         $L_{aux}$ is the error of predicted shape parameters.
-        $\tau_1=\tau_2$ means no split max pooling used for DSAN.}
+        $\tau_1=\tau_2$ means no joint max pooling used for DSAN.}
 \label{tab:var}
 \end{table}
 
 \noindent\textbf{Exploring the effect of $\{M, k_s, \tau_1, \tau_2\}$ to final segmentation.}
 In this experiment, the effects of different $M$, $k_s$, $\tau_1$, $\tau_2$ on the segmentation performance are jointly investigated.
-In order to reduce the hyper-parameters, we use $\varepsilon=\frac{(M-1)k_s}{2}$ to represent the effect of both $M$ and $k_s$ , because they have similar effects on SMP of changing the spreading range of a local maximum value.
-Especially, $\varepsilon=0$ means no split max pooling applying to the network.
+In order to reduce the hyper-parameters, we use $\varepsilon=\frac{(M-1)k_s}{2}$ to represent the effect of both $M$ and $k_s$ , because they have similar effects on JMP of changing the spreading range of a local maximum value.
+Especially, $\varepsilon=0$ means no joint max pooling applying to the network.
 First, we fix $\tau_2=0.7$ and vary $\tau_1$ to observe its influence of different $\varepsilon$ in DSAN model as shown in Figure~\ref{FigVar}~(a).
 Then, $\tau_1$ is fixed and $\tau_2$, $\varepsilon$ are varied in Figure~\ref{FigVar}~(b).
 Observed from Figure~\ref{FigVar}, it is properly to employ $\varepsilon=9$ for vesicle segmentation to obtain most of the gains for different $\tau1$ and $\tau2$.
@@ -73,11 +73,11 @@ In practice, we set $k_s=9$ and $K=3$ to satisfy the condition of $\varepsilon=9
 For $\tau_1$ in Figure~\ref{FigVar} (a), we find that $\tau_1=0.2$ is the best setting when $\varepsilon=9$.
 And fixing $\tau_1=0.2$, $0.9$ is found to be optimal for $\tau_2$ according to Figure~\ref{FigVar} (b).
 After searching the optimal $\tau_1$ and $\tau_2$, Table~\ref{tab:time} evaluates the effects of different $M$ and $k_s$ by fixing $\frac{(M-1)k_s}{2}=9$.
-From Table~\ref{tab:time}, the effects of $M$ and $k_s$ on inference times are small, thus we use $M=3$ and $k_s=3$ in rest experiments. 
+From Table~\ref{tab:time}, the effects of $M$ and $k_s$ on inference times are small, thus we use $M=3$ and $k_s=3$ in rest experiments.
 Finally, we find that the thresholds setting of $[0.2, 0.9]$ in Eq.~\ref{fusion} give the best performance on segmenting synaptical vesicles.
 
 Furthermore, table~\ref{tab:var} shows the results of several interval of $[\tau_1,\tau_2]$, where the $L_{aux}$ indicates the second loss term in Eq.~\ref{EqLoss}.
-From the table, it can be found that the loss of predicted shape parameters becomes small after using split max pooling layers, confirming our hypothesis illustrated in Sec.~\ref{sec:split-max-pooling}.
+From the table, it can be found that the loss of predicted shape parameters becomes small after using joint max pooling layers, confirming our hypothesis illustrated in Sec.~\ref{sec:joint-max-pooling}.
 And from the IOU score and F1 score, we find that too strong shape constraint on segmented object by a larger interval of $[\tau_1,\tau_2]$ is harmful to the IOU score but beneficial to the F1 score, which has been illustrated in Sec.~\ref{sec:fusion}.
 \begin{figure*}
     \begin{center}
@@ -123,7 +123,7 @@ GPU time &171& 201 & 203 & 202 & 201& 203 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Average inference time (ms/image) of DSAN. DSAN- is the shape-aware network without SMP optimization.}
+\caption{Average inference time (ms/image) of DSAN. DSAN- is the shape-aware network without JMP optimization.}
 \label{tab:time}
 \end{table}
 From Figure \ref{FigVesicle}, we can see that all the methods suffer from touching problem more or less in this experiment because of the blurry and dense objects contour.
@@ -134,7 +134,7 @@ Differently, our DSAN uses the shape parameters of objects as complementary info
 
 \noindent\textbf{Quantitative evaluation.}
 To quantitatively evaluate our method, we compare the object detection rate $F_1$ and the segmentation accuracy IOU of our DSAN with Deeplab~\cite{Chen2014a}, u-net~\cite{Ronneberger2015} and DCAN~\cite{Chen2016b}, which are commonly used in biomedical image processing.
-And we further implement DSAN- that is no-SMP version to prove the effectiveness of SMP.
+And we further implement DSAN- that is no-JMP version to prove the effectiveness of JMP.
 Their results are presented in Table~\ref{tab:vesicle} to prove superiority of our method.
 
 From the detection results, the performance of DSAN surpasses the other methods.
@@ -192,7 +192,7 @@ And for some benign cases, the predicted shape of irregular objects are also sat
         ExB2 & 92.0 & 68.6 &86.8\\
         ExB3 & 91.9&71.4&87.5\\
 		DCAN & 91.9 & $\mathbf{77.1}$& 88.7\\
-		DSAN & $\mathbf{92.2}$ & 76.8&$\mathbf{88.8}$ \\
+		DSAN & $\mathbf{92.5}$ & 76.9&$\mathbf{89.0}$ \\
 		\hline
 \end{tabular}
 \end{center}
