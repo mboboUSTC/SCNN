@@ -76,7 +76,7 @@ After searching the optimal $\tau_1$ and $\tau_2$, Table~\ref{tab:time} evaluate
 From Table~\ref{tab:time}, the effects of $M$ and $k_s$ on inference times are small, thus we use $M=3$ and $k_s=3$ in rest experiments.
 Finally, we find that the thresholds setting of $[0.2, 0.9]$ in Eq.~\ref{fusion} give the best performance on segmenting synaptical vesicles.
 
-Furthermore, table~\ref{tab:var} shows the results of several intervals of $[\tau_1,\tau_2]$, where $L_{aux}$ indicates the second term in Eq.~\ref{EqLoss} related to loss of the predicated shape parameters.
+Furthermore, table~\ref{tab:var} shows the results of several interval of $[\tau_1,\tau_2]$, where the $L_{aux}$ indicates the second loss term in Eq.~\ref{EqLoss}.
 From the table, it can be found that the loss of predicted shape parameters becomes small after using joint max pooling layers, confirming our hypothesis illustrated in Sec.~\ref{sec:joint-max-pooling}.
 And from the IOU score and F1 score, we find that too strong shape constraint on segmented object by a larger interval of $[\tau_1,\tau_2]$ is harmful to the IOU score but beneficial to the F1 score, which has been illustrated in Sec.~\ref{sec:fusion}.
 \begin{figure*}
